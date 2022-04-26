@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Task, TaskDocument } from 'src/schemas/task.schema';
 import { CreateTaskDto } from './createTaskDto';
-import * as fileUtil from '../util/file-util';
+import * as mongoose from 'mongoose';
 import { ImageService } from './image.service';
 import { Image } from '../schemas/image.schema';
 
@@ -27,17 +27,15 @@ export class TaskService {
     return await this.taskModel.findByIdAndUpdate(id, task, { new: true });
   }
   async createTask(createTaskDto: CreateTaskDto, file: Express.Multer.File): Promise<Task> {
-    const task = { ...createTaskDto, name: 'test', state: 'created', creationDate: new Date() };
+    const taskId = new mongoose.Types.ObjectId();
+    const taskIdString = taskId.toString();
+    //generate image
+    const imageComplete: Image = await this.imageService.generateImageSchema(taskIdString, file);
+    //save task
+    const task = { ...createTaskDto, _id: taskId, name: 'test', state: 'created', creationDate: new Date(), images: [imageComplete] };
     const createdTask = new this.taskModel(task);
     const savedTask = await createdTask.save();
-
-    const taskId = savedTask._id.toString();
-    const imageComplete: Image = await this.imageService.generateImageSchema(taskId, file);
-
-    const savedTaskWithImages = { ...task, images: [imageComplete] };
-    console.log(savedTaskWithImages);
-    await this.update(taskId, savedTaskWithImages);
-
+    //write file image
     this.imageService.writeFileTask(imageComplete, file);
 
     return savedTask;

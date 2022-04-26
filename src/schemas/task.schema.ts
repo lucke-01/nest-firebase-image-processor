@@ -8,6 +8,8 @@ export type TaskDocument = Task & Document;
 @Schema()
 export class Task {
   @Prop()
+  _id: string;
+  @Prop()
   name: string;
   @Prop()
   creationDate: Date;

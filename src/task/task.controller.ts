@@ -36,14 +36,17 @@ export class TaskController {
       fileFilter: imageFileFilter,
     })
   )
-  uploadFile(@Req() req: any, @UploadedFile() file: Express.Multer.File, @Body() taskDto: CreateTaskDto) {
-    console.log('file');
-    console.log(file);
-
-    console.log('taskDto');
-    console.log(taskDto);
+  uploadFile(@Res() response, @Req() req: any, @UploadedFile() file: Express.Multer.File, @Body() taskDto: CreateTaskDto) {
+    if (file == null) {
+      return response.status(HttpStatus.BAD_REQUEST).json({
+        error: 'file required',
+      });
+    }
 
     this.taskService.createTask(taskDto, file);
+    return response.status(HttpStatus.BAD_REQUEST).json({
+      data: taskDto,
+    });
   }
   @Delete('/:id')
   @UseInterceptors(CastErrorInterceptor)

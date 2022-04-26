@@ -1,7 +1,4 @@
-1- post task: 
-    create images in file directory output
-        /output/(taskId)/(widthOfImage)/(md5ofImage)
-2- connect to serverless
+- connect to serverless
     connect to serverless 
     save processed img from serverless in our db
     update state of task

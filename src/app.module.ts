@@ -5,10 +5,11 @@ import { TaskController } from './task/task.controller';
 import { TaskService } from './task/task.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Task, TaskSchema } from './schemas/task.schema';
+import { ImageService } from './task/image.service';
 
 @Module({
   imports: [MongooseModule.forRoot('mongodb://root:password@localhost/tasks'), MongooseModule.forFeature([{ name: Task.name, schema: TaskSchema }])],
   controllers: [AppController, TaskController],
-  providers: [AppService, TaskService],
+  providers: [AppService, ImageService, TaskService],
 })
 export class AppModule {}

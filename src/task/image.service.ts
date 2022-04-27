@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import * as fileUtil from '../util/file-util';
 import * as Jimp from 'jimp';
 import * as CryptoJS from 'crypto-js';
 import { Image } from '../schemas/image.schema';
+import * as fileUtil from '../util/file-util';
 
 @Injectable()
 export class ImageService {

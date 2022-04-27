@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
-import { imageFileFilter } from 'src/filters/image-filter';
-import { CastErrorInterceptor } from 'src/interceptors/cast-error.interceptor';
-import { Task } from 'src/schemas/task.schema';
+import { imageFileFilter } from '../filters/image-filter';
+import { CastErrorInterceptor } from '../interceptors/cast-error.interceptor';
+import { Task } from '../schemas/task.schema';
 import { CreateTaskDto } from './createTaskDto';
 import { TaskService } from './task.service';
 
@@ -21,11 +21,11 @@ export class TaskController {
     const task = await this.taskService.findById(params.taskId);
     if (task == null) {
       return response.status(HttpStatus.NOT_FOUND).json({
-        error: 'Not Found',
+        data: 'Not Found',
       });
     }
     return response.status(HttpStatus.OK).json({
-      task,
+      data: task,
     });
   }
 
@@ -36,10 +36,10 @@ export class TaskController {
       fileFilter: imageFileFilter,
     })
   )
-  uploadFile(@Res() response, @Req() req: any, @UploadedFile() file: Express.Multer.File, @Body() taskDto: CreateTaskDto) {
+  createTask(@Res() response, @Req() req: any, @UploadedFile() file: Express.Multer.File, @Body() taskDto: CreateTaskDto) {
     if (file == null) {
       return response.status(HttpStatus.BAD_REQUEST).json({
-        error: 'file required',
+        data: 'file required',
       });
     }
 
@@ -54,11 +54,11 @@ export class TaskController {
     const deletedTask = await this.taskService.deleteById(id);
     if (deletedTask == null) {
       return response.status(HttpStatus.NOT_FOUND).json({
-        error: 'Not Found',
+        data: 'Not Found',
       });
     }
     return response.status(HttpStatus.OK).json({
-      deletedTask,
+      data: deletedTask,
     });
   }
   @Put('/:id')
@@ -67,11 +67,11 @@ export class TaskController {
     const updatedTask = await this.taskService.update(id, task);
     if (updatedTask == null) {
       return response.status(HttpStatus.NOT_FOUND).json({
-        error: 'Not Found',
+        data: 'Not Found',
       });
     }
     return response.status(HttpStatus.OK).json({
-      updatedTask,
+      data: updatedTask,
     });
   }
 }

@@ -1,7 +1,7 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Task, TaskDocument } from 'src/schemas/task.schema';
+import { Task, TaskDocument } from '../schemas/task.schema';
 import { CreateTaskDto } from './createTaskDto';
 import * as mongoose from 'mongoose';
 import { ImageService } from './image.service';
@@ -14,11 +14,11 @@ export class TaskService {
     return 'Tasks!';
   }
   async findAll(): Promise<Task[]> {
-    return this.taskModel.find().exec();
+    return this.taskModel.find();
   }
   async findById(id): Promise<Task> {
     //return this.taskModel.findOne({ identifier: id }).exec();
-    return this.taskModel.findById(id).exec();
+    return this.taskModel.findById(id);
   }
   async deleteById(id): Promise<any> {
     return await this.taskModel.findByIdAndRemove(id);

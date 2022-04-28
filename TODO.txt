@@ -1,4 +1,0 @@
-- connect to serverless
-    connect to serverless 
-    save processed img from serverless in our db
-    update state of task

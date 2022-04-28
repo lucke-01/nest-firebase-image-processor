@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
 import { imageFileFilter } from '../filters/image-filter';
-import { CastErrorInterceptor } from '../interceptors/cast-error.interceptor';
 import { Task } from '../schemas/task.schema';
 import { CreateTaskDto } from './createTaskDto';
 import { TaskService } from './task.service';
@@ -16,7 +15,6 @@ export class TaskController {
     return tasks;
   }
   @Get(':taskId')
-  @UseInterceptors(CastErrorInterceptor)
   async getTask(@Res() response, @Param() params) {
     const task = await this.taskService.findById(params.taskId);
     if (task == null) {
@@ -48,7 +46,6 @@ export class TaskController {
     });
   }
   @Delete('/:id')
-  @UseInterceptors(CastErrorInterceptor)
   async delete(@Res() response, @Param('id') id) {
     const deletedTask = await this.taskService.deleteById(id);
     if (deletedTask == null) {
@@ -61,7 +58,6 @@ export class TaskController {
     });
   }
   @Put('/:id')
-  @UseInterceptors(CastErrorInterceptor)
   async update(@Res() response, @Param('id') id, @Body() task: Task) {
     const updatedTask = await this.taskService.update(id, task);
     if (updatedTask == null) {

@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { MongoClient } from 'mongodb';
 
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../src/app.module';
 import { AppController } from '../src/app.controller';
 import { AppService } from '../src/app.service';
 import { ImageService } from '../src/task/image.service';
@@ -13,8 +13,10 @@ import { TaskService } from '../src/task/task.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Task, TaskSchema } from '../src/schemas/task.schema';
 import { tasks } from '../src/test/tasks-mock';
+import * as fsExtra from 'fs-extra';
 
 describe('TaskController (e2e)', () => {
+  const clearOutputImageDir = true;
   const numberTasks = tasks.length;
   let app: INestApplication;
   let mongoServer: MongoMemoryServer;
@@ -41,6 +43,8 @@ describe('TaskController (e2e)', () => {
       providers: [AppService, ImageService, TaskService]
     }).compile();
     app = moduleFixture.createNestApplication();
+    //autovalidation
+    app.useGlobalPipes(new ValidationPipe());
     await app.init();
   });
   afterAll(async () => {
@@ -50,6 +54,10 @@ describe('TaskController (e2e)', () => {
     }
     if (app) {
       await app.close();
+    }
+    //clear test/output-images dir
+    if (clearOutputImageDir) {
+      fsExtra.emptyDirSync('test/output-images/');
     }
   });
 
@@ -134,7 +142,6 @@ describe('TaskController (e2e)', () => {
   });
 
   it('[OK] /task/ (POST)', () => {
-    console.log('file:'+__dirname + '/resources/example-images/testImage.jpg');
     return request(app.getHttpServer())
       .post('/task/')  
       .set('Connection', 'keep alive')
@@ -144,62 +151,59 @@ describe('TaskController (e2e)', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .then(response => {
-        console.log('response post');
-        console.log(response);
         const taskResponse = response.body.data;
         expect(taskResponse.priority).toBe('4')
       })
   });
-
-});
-/*
-agent.post('/pictures')
-     .set('Connection', 'keep alive')
-     .set('Content-Type', 'application/x-www-form-urlencoded')
-     .field('picTitle', 'Picture Title')
-     .field('tags[0][name]', tags[0].name)
-     .field('tags[1][name]', tags[1].name)
-     .field('tags[2][name]', tags[2].name)
-     .attach('file', __dirname + '/img/noel.jpg')
-     .end(function(pictureSaveErr, pictureSaveRes) {
-         //do stuff
-     }
-*/
-//TODO: THIS
-/*
-import * as request from 'supertest';
-import { Test } from '@nestjs/testing';
-import { CatsModule } from '../../src/cats/cats.module';
-import { CatsService } from '../../src/cats/cats.service';
-import { INestApplication } from '@nestjs/common';
-
-describe('Cats', () => {
-  let app: INestApplication;
-  let catsService = { findAll: () => ['test'] };
-
-  beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [CatsModule],
-    })
-      .overrideProvider(CatsService)
-      .useValue(catsService)
-      .compile();
-
-    app = moduleRef.createNestApplication();
-    await app.init();
-  });
-
-  it(`/GET cats`, () => {
+  it('[NOT FILE] /task/ (POST)', () => {
     return request(app.getHttpServer())
-      .get('/cats')
-      .expect(200)
-      .expect({
-        data: catsService.findAll(),
+      .post('/task/')  
+      .set('Connection', 'keep alive')
+      .set('Content-Type', 'multipart/form-data')
+      .field('priority', '4')
+      .attach('file', null)
+      .expect(400)
+      .expect('Content-Type', /json/)
+      .expect({ data: 'file required'});
+  });
+  it('[BAD FILE] /task/ (POST)', () => {
+    return request(app.getHttpServer())
+      .post('/task/')
+      .set('Connection', 'keep alive')
+      .set('Content-Type', 'multipart/form-data')
+      .field('priority', '4')
+      .attach('file', __dirname + '/resources/example-images/test.pdf')
+      .expect(400)
+      .expect('Content-Type', /json/)
+      .then(response => {
+        expect(response.body.message).toBe('Only image files are allowed!')
+      });
+  });
+  it('[bad body] /task/ (POST)', () => {
+    return request(app.getHttpServer())
+      .post('/task/')  
+      .set('Connection', 'keep alive')
+      .set('Content-Type', 'multipart/form-data')
+      .field('priority', 'BADVALUE')
+      .attach('file', __dirname + '/resources/example-images/testImage.jpg')
+      .expect(400)
+      .expect('Content-Type', /json/)
+      .then(response => {
+        expect(response.body.message[0]).toBe('priority must be a number string')
+      });
+  });
+  it('[bad body and file] /task/ (POST)', () => {
+    return request(app.getHttpServer())
+      .post('/task/')  
+      .set('Connection', 'keep alive')
+      .set('Content-Type', 'multipart/form-data')
+      .field('priority', 'BADVALUE')
+      .attach('file', null)
+      .expect(400)
+      .expect('Content-Type', /json/)
+      .then(response => {
+        expect(response.body.message[0]).toBe('priority must be a number string')
       });
   });
 
-  afterAll(async () => {
-    await app.close();
-  });
 });
-*/

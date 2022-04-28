@@ -10,8 +10,6 @@ export class Task {
   @Prop()
   _id: string;
   @Prop()
-  name: string;
-  @Prop()
   creationDate: Date;
   @Prop()
   priority: number;

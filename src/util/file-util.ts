@@ -27,6 +27,3 @@ export function createDirectoryIfNotExist(dir: string) {
 export function getDirectoryOfFilePath(filePath: string) {
   return filePath.substring(0, filePath.lastIndexOf('/') + 1);
 }
-export function clearDirectory(dir: string) {
-  readdirSync(dir).forEach(file => rmSync(`${dir}/${file}`));
-}

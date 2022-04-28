@@ -17,7 +17,6 @@ export class TaskService {
     return this.taskModel.find();
   }
   async findById(id): Promise<Task> {
-    //return this.taskModel.findOne({ identifier: id }).exec();
     return this.taskModel.findById(id);
   }
   async deleteById(id): Promise<any> {
@@ -32,7 +31,7 @@ export class TaskService {
     //generate image
     const imageComplete: Image = await this.imageService.generateImageSchema(taskIdString, file);
     //save task
-    const task = { ...createTaskDto, _id: taskId, name: 'test', state: 'created', creationDate: new Date(), images: [imageComplete] };
+    const task = { ...createTaskDto, _id: taskId, state: 'created', creationDate: new Date(), images: [imageComplete] };
     const createdTask = new this.taskModel(task);
     const savedTask = await createdTask.save();
     //write file image

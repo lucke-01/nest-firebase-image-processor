@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { readdirSync, rmSync } from 'fs';
 import * as path from 'path';
 
 export const appDir = path.dirname(require.main.filename);
@@ -25,4 +26,7 @@ export function createDirectoryIfNotExist(dir: string) {
 }
 export function getDirectoryOfFilePath(filePath: string) {
   return filePath.substring(0, filePath.lastIndexOf('/') + 1);
+}
+export function clearDirectory(dir: string) {
+  readdirSync(dir).forEach(file => rmSync(`${dir}/${file}`));
 }

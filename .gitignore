@@ -36,3 +36,4 @@ lerna-debug.log*
 
 # output file
 /output
+/test/output-images

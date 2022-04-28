@@ -30,7 +30,6 @@ export class TaskController {
   }
 
   @Post()
-  //file: is the name of file
   @UseInterceptors(
     FileInterceptor('file', {
       fileFilter: imageFileFilter,
@@ -44,7 +43,7 @@ export class TaskController {
     }
 
     this.taskService.createTask(taskDto, file);
-    return response.status(HttpStatus.BAD_REQUEST).json({
+    return response.status(HttpStatus.OK).json({
       data: taskDto,
     });
   }
@@ -67,7 +66,7 @@ export class TaskController {
     const updatedTask = await this.taskService.update(id, task);
     if (updatedTask == null) {
       return response.status(HttpStatus.NOT_FOUND).json({
-        data: 'Not Found',
+        data: 'ID Not Found',
       });
     }
     return response.status(HttpStatus.OK).json({

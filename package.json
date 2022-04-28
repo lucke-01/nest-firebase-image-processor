@@ -9,16 +9,16 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "env-cmd -f .env.local nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "env-cmd -f .env.pro node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest --runInBand",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test": "env-cmd -f .env.test jest --runInBand",
+    "test:watch": "env-cmd -f .env.test jest --testTimeout=100000 --watch",
+    "test:cov": "env-cmd -f .env.test jest --testTimeout=100000 --coverage",
+    "test:debug": "env-cmd -f .env.test node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "env-cmd -f .env.test jest --testTimeout=100000 --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
@@ -28,6 +28,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "crypto-js": "^4.1.1",
+    "env-cmd": "^10.1.0",
     "firebase": "^9.6.11",
     "fs": "^0.0.1-security",
     "jimp": "^0.16.1",
@@ -80,7 +81,8 @@
   },
   "config": {
     "mongodbMemoryServer": {
-      "debug": "1"
+      "//1": "1 activate, 0 desactivate",
+      "debug": "0"
     }
   }
 }

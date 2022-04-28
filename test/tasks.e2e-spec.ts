@@ -15,52 +15,142 @@ import { Task, TaskSchema } from '../src/schemas/task.schema';
 import { tasks } from '../src/test/tasks-mock';
 
 describe('TaskController (e2e)', () => {
+  const numberTasks = tasks.length;
   let app: INestApplication;
   let mongoServer: MongoMemoryServer;
   let mongoDbURI : string;
 
   beforeAll(async () => {
-    // This will create an new instance of "MongoMemoryServer" and automatically start it
+    //SET UP MONGODB
     mongoServer = await MongoMemoryServer.create();
     mongoDbURI = mongoServer.getUri()+'tasks';
 
+    //CREATE DATA IN DATABASE
     const con = await MongoClient.connect(mongoDbURI, {});
     const db = con.db(mongoServer.instanceInfo!.dbName);
-    
-    db.dropCollection('tasks');
-
     expect(db).toBeDefined();
     const col = db.collection('tasks');
     const result = await col.insertMany(tasks as any);
     expect(result.insertedCount).toStrictEqual(2);
-
+    con.close();
+    //SET UP APP
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule,MongooseModule.forRoot(mongoDbURI), MongooseModule.forFeature([{ name: Task.name, schema: TaskSchema }])],
+      imports: [MongooseModule.forRoot(mongoDbURI),
+      MongooseModule.forFeature([{ name: Task.name, schema: TaskSchema }])],
       controllers: [AppController, TaskController],
       providers: [AppService, ImageService, TaskService]
     }).compile();
-
     app = moduleFixture.createNestApplication();
     await app.init();
-
   });
   afterAll(async () => {
+    //CLOSE SERVICES
     if (mongoServer) {
       await mongoServer.stop();
     }
-    await app.close();
+    if (app) {
+      await app.close();
+    }
   });
 
-  beforeEach(async () => {
-    
-  });
-
-  it('/task/list (GET)', () => {
+  it('OK /task/list (GET)', () => {
     return request(app.getHttpServer())
       .get('/task/list')
       .expect(200)
-      .expect('Hello World!');
+      .then(response => {
+        const tasksResponse = response.body;
+        expect(tasksResponse.length).toBe(numberTasks)
+      });
   });
+  it('[OK] /task/:id (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/task/' + tasks[0]._id)
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .then(response => {
+        const task = response.body.data;
+        expect(task._id).toBe(tasks[0]._id)
+      })
+  });
+  it('[NO VALID ID] /task/:id (GET)', () => {
+    //invalid id
+    return request(app.getHttpServer())
+      .get('/task/' + 'notvalidid')
+      .expect(404)
+      .expect('Content-Type', /json/);
+  });
+  it('[NOT FOUND ID] /task/:id (GET)', () => {
+    //valid id but not found
+    return request(app.getHttpServer())
+      .get('/task/' + '507f1f77bcf86cd799439011')
+      .expect(404)
+      .expect('Content-Type', /json/);
+  });
+  it('[OK] /task/:id (DELETE)', () => {
+    return request(app.getHttpServer())
+      .delete('/task/' + tasks[0]._id)
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .then(response => {
+        const task = response.body.data;
+        expect(task._id).toBe(tasks[0]._id)
+        //check if there are one task less
+        return request(app.getHttpServer())
+          .get('/task/list')
+          .expect(200)
+          .then(response => {
+            const tasksResponse = response.body;
+            expect(tasksResponse.length).toBe(numberTasks-1)
+          });
+      })
+  });
+  it('[NOT FOUND ID] /task/:id (DELETE)', () => {
+    //valid id but not found
+    return request(app.getHttpServer())
+      .delete('/task/' + '507f1f77bcf86cd799439011')
+      .expect(404)
+      .expect('Content-Type', /json/);
+  });
+
+  it('[OK] /task/:id (PUT)', () => {
+    const taskModified = {...tasks[1],priority: 0};
+    return request(app.getHttpServer())
+      .put('/task/' + tasks[1]._id)
+      .send(taskModified)
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .then(response => {
+        const taskResponse = response.body.data;
+        expect(taskResponse.priority).toBe(0)
+      })
+  });
+  it('[NOT FOUND] /task/:id (PUT)', () => {
+    const taskModified = {...tasks[1],priority: 0};
+    return request(app.getHttpServer())
+      .put('/task/' + 'notfoundid')
+      .send(taskModified)
+      .expect(404)
+      .expect('Content-Type', /json/)
+  });
+
+  it('[OK] /task/ (POST)', () => {
+    console.log('file:'+__dirname + '/resources/example-images/testImage.jpg');
+    return request(app.getHttpServer())
+      .post('/task/')  
+      .set('Connection', 'keep alive')
+      .set('Content-Type', 'multipart/form-data')
+      .field('priority', '4')
+      .attach('file', __dirname + '/resources/example-images/testImage.jpg')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .then(response => {
+        console.log('response post');
+        console.log(response);
+        const taskResponse = response.body.data;
+        expect(taskResponse.priority).toBe('4')
+      })
+  });
+
 });
 /*
 agent.post('/pictures')

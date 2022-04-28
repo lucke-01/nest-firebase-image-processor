@@ -6,7 +6,6 @@ export type ImageDocument = Image & Document;
 
 @Schema()
 export class Image {
-  static mainDir = 'output';
   @Prop()
   md5: string;
   @Prop()

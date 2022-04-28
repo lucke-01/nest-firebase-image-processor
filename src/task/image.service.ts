@@ -9,7 +9,7 @@ export class ImageService {
   constructor() {}
 
   async writeFileTask(image: Image, file: Express.Multer.File): Promise<any> {
-    return fileUtil.writeFile(Image.mainDir + '/' + image.filePath, file.buffer);
+    return fileUtil.writeFile(process.env.PATH_IMAGES + '/' + image.filePath, file.buffer);
   }
   async generateImageSchema(taskId: string, file: Express.Multer.File): Promise<Image> {
     const fileJimp = await Jimp.read(file.buffer);

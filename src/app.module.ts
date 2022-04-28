@@ -8,7 +8,7 @@ import { Task, TaskSchema } from './schemas/task.schema';
 import { ImageService } from './task/image.service';
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://root:password@localhost/tasks'), MongooseModule.forFeature([{ name: Task.name, schema: TaskSchema }])],
+  imports: [MongooseModule.forRoot(process.env.MONGODB_URI), MongooseModule.forFeature([{ name: Task.name, schema: TaskSchema }])],
   controllers: [AppController, TaskController],
   providers: [AppService, ImageService, TaskService],
 })

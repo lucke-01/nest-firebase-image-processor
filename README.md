@@ -161,6 +161,9 @@ docker-compose up dev
 docker-compose up prod
 #iniciar con acceso terminal
 docker-compose up -d prod
+
+#start rebuilding image
+docker-compose up dev --build
 ```
 
 ## Test

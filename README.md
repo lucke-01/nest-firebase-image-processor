@@ -140,7 +140,7 @@ Motivos de su uso:
 npm install
 ```
 
-## Iniciar Aplicación
+## Iniciar Aplicación Local
 ```bash
 #Antes de iniciar se requiere una instancia de mongodb en localhost
 cd ./mongodb && docker-compose up
@@ -150,6 +150,17 @@ npm run start
 npm run start:dev
 # producción
 npm run start:prod
+```
+
+## Iniciar Aplicación Docker
+```bash
+#IMPORTANTE Antes de empezar tener libres los siguientes puertos: 27017, 3000 y 9229
+#Iniciar en modo desarrollo/debug
+docker-compose up dev
+#Iniciar en modo produccion
+docker-compose up prod
+#iniciar con acceso terminal
+docker-compose up -d prod
 ```
 
 ## Test

@@ -1,0 +1,6 @@
+docker build --target development -t nestjs-test .
+docker run -dtiP -p 3000:3000 --name nestjs-test-container nestjs-test
+docker exec -ti nestjs-test-container /bin/sh
+
+docker rm -f nestjs-test-container
+docker rmi nestjs-test

@@ -10,9 +10,6 @@ import { Image } from '../schemas/image.schema';
 @Injectable()
 export class TaskService {
   constructor(@InjectModel(Task.name) private taskModel: Model<TaskDocument>, private readonly imageService: ImageService) {}
-  getHello(): string {
-    return 'Tasks!';
-  }
   async findAll(): Promise<Task[]> {
     return this.taskModel.find();
   }

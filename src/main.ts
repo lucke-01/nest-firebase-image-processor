@@ -2,7 +2,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
-//require('dotenv-flow').config();
+console.log('process.env.MONGODB_URI');
+console.log(process.env.MONGODB_URI);
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   //autovalidation

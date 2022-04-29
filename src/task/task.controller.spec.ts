@@ -63,7 +63,7 @@ describe('TaskController Spy', () => {
         .mockResolvedValue(tasks[0]);
       
       const taskDto = {priority: 3};
-      const file: Express.Multer.File = null;
+      const file: any = null;
       const responseCreateTask = await taskController.createTask(response,null, file, taskDto);
       //bad request not file
       expect(responseCreateTask.data).toBe('file required');

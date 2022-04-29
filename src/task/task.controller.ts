@@ -33,7 +33,7 @@ export class TaskController {
       fileFilter: imageFileFilter,
     })
   )
-  createTask(@Res() response, @Req() req: any, @UploadedFile() file: Express.Multer.File, @Body() taskDto: CreateTaskDto) {
+  createTask(@Res() response, @Req() req: any, @UploadedFile() file: any, @Body() taskDto: CreateTaskDto) {
     if (file == null) {
       return response.status(HttpStatus.BAD_REQUEST).json({
         data: 'file required',

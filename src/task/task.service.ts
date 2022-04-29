@@ -22,7 +22,7 @@ export class TaskService {
   async update(id, task: Task): Promise<Task> {
     return await this.taskModel.findByIdAndUpdate(id, task, { new: true });
   }
-  async createTask(createTaskDto: CreateTaskDto, file: Express.Multer.File): Promise<Task> {
+  async createTask(createTaskDto: CreateTaskDto, file: any): Promise<Task> {
     const taskId = new mongoose.Types.ObjectId();
     const taskIdString = taskId.toString();
     //generate image

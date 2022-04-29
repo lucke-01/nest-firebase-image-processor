@@ -8,10 +8,10 @@ import * as fileUtil from '../util/file-util';
 export class ImageService {
   constructor() {}
 
-  async writeFileTask(image: Image, file: Express.Multer.File): Promise<any> {
+  async writeFileTask(image: Image, file: any): Promise<any> {
     return fileUtil.writeFile(process.env.PATH_IMAGES + '/' + image.filePath, file.buffer);
   }
-  async generateImageSchema(taskId: string, file: Express.Multer.File): Promise<Image> {
+  async generateImageSchema(taskId: string, file: any): Promise<Image> {
     const fileJimp = await Jimp.read(file.buffer);
     const fileJimpWidth = fileJimp.bitmap.width;
     const fileJimpHeight = fileJimp.bitmap.height;

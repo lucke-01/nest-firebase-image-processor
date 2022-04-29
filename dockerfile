@@ -7,7 +7,7 @@ COPY package*.json ./
 
 RUN apt-get update && apt-get install nodejs npm procps -y
 
-RUN npm install -g env-cmd nest rimraf
+RUN npm install -g env-cmd nest rimraf @nestjs/cli
 
 RUN npm install
 
@@ -15,24 +15,20 @@ COPY . .
 
 RUN npm run build
 
-CMD npm start
+#CMD npm start
 
-FROM ubuntu:latest as production
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
+FROM node:18-alpine3.14 AS production
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN apt-get update && apt-get install nodejs npm procps -y
+#RUN apt-get update && apt-get install nodejs npm procps -y
 
-RUN npm install -g env-cmd nest rimraf
+RUN npm install -g env-cmd nest rimraf @nestjs/cli
 
-RUN npm install --only=production
+RUN npm install
 
 COPY . .
 
-COPY --from=development /usr/src/app/dist ./dist
-
-CMD ["node", "dist/main"]
+RUN npm run build

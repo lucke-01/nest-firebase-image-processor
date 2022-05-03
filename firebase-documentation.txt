@@ -1,0 +1,24 @@
+Create firebase project
+    1- start login
+        firebase login
+    2- create firebase project
+        firebase init
+    3- options:
+        1- select existing project and choose one of your firebase account
+        2- select use: Javascript
+        3- select use functions and emulators on default port: 5001
+        4- select use emulator ui too on port 5002
+        5- select emulator for functions
+Running in local
+    1- go to firebase dir and functions dir
+    2- discomment hello world function in index.js
+    3- run firebase in local:
+        (in functions dir)
+            npm run serve
+        or (in root dir)
+            firebase serve
+    4- Test requests
+        test default hello world function in local
+            http://localhost:5001/zara-images/us-central1/helloWorld
+        test expressJs hello world function in local
+            http://localhost:5001/zara-images/us-central1/app/hello-world

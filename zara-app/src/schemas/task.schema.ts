@@ -7,6 +7,12 @@ export type TaskDocument = Task & Document;
 
 @Schema()
 export class Task {
+  static states: any = {
+    CREATED: 'created',
+    PROCCESING: 'processing',
+    ERROR: 'error',
+    FINISHED: 'finished'
+  };
   @Prop()
   _id: string;
   @Prop()
@@ -15,6 +21,8 @@ export class Task {
   priority: number;
   @Prop()
   state: string;
+  @Prop()
+  message: string;
   @Prop()
   images: Image[];
 }

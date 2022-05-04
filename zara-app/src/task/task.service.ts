@@ -36,4 +36,26 @@ export class TaskService {
 
     return savedTask;
   }
+  async findTaskByState(state: string): Promise<Task[]> {
+    return await this.taskModel.find({ 'state': state }).sort([['priority', -1], ['creationDate', 1]]);
+  }
+  async findTaskByStates(states: string[]): Promise<Task[]> {
+    return await this.taskModel.find().where('state').in(states).sort([['priority', -1], ['creationDate', 1]]);
+  }
+  async saveProcessedImages(task : Task, originalImage: Image, processedImages) {
+    const imagesModified : Image[] = [];
+    
+    for (const pi of processedImages) {
+      //const content = fs.readFileSync('/path/to/file.jpg', {encoding: 'base64'});
+      //Buffer.from('username:password', 'utf8').toString('base64')
+      const contentBuffer = Buffer.from(pi.buffer, 'base64');
+
+      const imageModified: Image = await this.imageService.generateImageModifiedSchema(task, originalImage, contentBuffer);
+
+      imagesModified.push(imageModified);
+    }
+    console.log('imagesModified');
+    console.log(imagesModified);
+    //this.update(task._id,{...task,state: Task.states.FINISHED});
+  }
 }

@@ -3,6 +3,7 @@ import * as Jimp from 'jimp';
 import * as CryptoJS from 'crypto-js';
 import { Image } from '../schemas/image.schema';
 import * as fileUtil from '../util/file-util';
+import { Task } from '../schemas/task.schema';
 
 @Injectable()
 export class ImageService {
@@ -28,6 +29,27 @@ export class ImageService {
       width: fileJimpWidth,
       height: fileJimpHeight,
       original: true,
+    };
+
+    return image;
+  }
+  async generateImageModifiedSchema(task: Task, originalImage: Image, buffer: any): Promise<Image> {
+    const fileJimp = await Jimp.read(buffer);
+    const fileJimpWidth = fileJimp.bitmap.width;
+    const fileJimpHeight = fileJimp.bitmap.height;
+    
+    const md5File = CryptoJS.MD5(buffer).toString();
+
+    const fileExtension = originalImage.filePath.split('.').pop();
+    const fileName = task._id + '/' + fileJimpWidth + '/' + md5File + '.' + fileExtension;
+
+    const image: Image = {
+      md5: md5File,
+      filePath: fileName,
+      creationDate: new Date(),
+      width: fileJimpWidth,
+      height: fileJimpHeight,
+      original: false
     };
 
     return image;

@@ -4,7 +4,6 @@ import * as request from 'supertest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { MongoClient } from 'mongodb';
 
-import { AppModule } from '../src/app.module';
 import { AppController } from '../src/app.controller';
 import { AppService } from '../src/app.service';
 import { ImageService } from '../src/task/image.service';
@@ -33,7 +32,7 @@ describe('TaskController (e2e)', () => {
     expect(db).toBeDefined();
     const col = db.collection('tasks');
     const result = await col.insertMany(tasks as any);
-    expect(result.insertedCount).toStrictEqual(2);
+    expect(result.insertedCount).toStrictEqual(numberTasks);
     con.close();
     //SET UP APP
     const moduleFixture: TestingModule = await Test.createTestingModule({

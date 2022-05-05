@@ -6,7 +6,6 @@ import { Task } from '../schemas/task.schema';
 import { TaskService } from '../task/task.service';
 import { Image } from '../schemas/image.schema';
 import * as FormData from 'form-data'
-import {Blob} from 'node:buffer';
 
 @Injectable()
 export class ProcessImageTaskService {
@@ -25,22 +24,16 @@ export class ProcessImageTaskService {
     } catch (err) {
         this.logger.error('CRON ProcessImageTaskService FAILED: '+err);
     }
-
-    this.logger.debug('CRON ProcessImageTaskService FINISHED');
   }
 
   async processImagesResize() {
-    const createdTasks : Task[] = await this.taskService.findTaskByStates([Task.states.CREATED, Task.states.PROCCESING ]);
-    this.logger.debug('createdTasks' + createdTasks);
-
+    const createdTasks : Task[] = await this.taskService.findTaskByStates([Task.states.CREATED, Task.states.PROCCESING, Task.states.ERROR ]);
     createdTasks.forEach(task => {
         this.processImageResize(task);
     });
   }
   async processImageResize(task : Task) {
-    const taskDB = await this.taskService.findById(task._id);
-    taskDB.state = Task.states.PROCCESING;
-    this.taskService.update(task._id, taskDB);
+    this.taskService.updateOne(task._id, {state: Task.states.PROCCESING});
     try {
         const originalImage : Image = task.images.find(img => img.original);
         this.logger.debug('originalImage');
@@ -57,14 +50,14 @@ export class ProcessImageTaskService {
             }
         }).then(res => {
             const processedImages = res.data.data;
-            this.logger.debug('response: '+res);
-            this.taskService.saveProcessedImages(task, originalImage, processedImages);
+            return this.taskService.saveProcessedImages(task, originalImage, processedImages)
         }).catch(err => {
-            this.logger.error('ERROR: '+err);
+          this.logger.error('processImageResize FAILED: ' + err);
+          this.taskService.updateOne(task._id, {state: Task.states.ERROR, message: 'processImageResize FAILED: ' + err});
         });
     } catch (err) {
-        taskDB.state = Task.states.FINISHED;
-        this.taskService.update(task._id, taskDB);
+        this.logger.error('processImageResize FAILED TRY: ' + err);
+        this.taskService.updateOne(task._id, {state: Task.states.ERROR, message: 'processImageResize FAILED: ' + err});
     }
   }
 }

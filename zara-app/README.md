@@ -140,7 +140,17 @@ Motivos de su uso:
 npm install
 ```
 
+# Iniciar Aplicación
+
+## IMPORTANTE: necesario iniciar antes firebase-api: 
+
+```bash
+cd firebase-api/functions
+npm run serve
+```
+
 ## Iniciar Aplicación Local
+
 ```bash
 #Antes de iniciar se requiere una instancia de mongodb en localhost
 cd ./mongodb && docker-compose up
@@ -153,6 +163,7 @@ npm run start:prod
 ```
 
 ## Iniciar Aplicación Docker
+
 ```bash
 #IMPORTANTE Antes de empezar tener libres los siguientes puertos: 27017, 3000 y 9229
 #Iniciar en modo desarrollo/debug

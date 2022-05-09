@@ -1,0 +1,10 @@
+{
+  "verbose": false,
+  "moduleFileExtensions": ["js", "json"],
+  "rootDir": "..",
+  "testEnvironment": "node",
+  "testRegex": "(.spec.js$)|(\\.spec\\.js$)",
+  "collectCoverage": true,
+  "coverageReporters": ["json", "html"],
+  "collectCoverageFrom": ["src/**/*.js"]
+}

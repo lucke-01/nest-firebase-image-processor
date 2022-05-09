@@ -44,18 +44,7 @@ export class TaskService {
     return await this.taskModel.find().where('state').in(states).sort([['priority', -1], ['creationDate', 1]]);
   }
   async updateOne(id, task: any) {
-    const res = await this.taskModel.updateOne({ _id: id }, task);
-    return res;
-    /*res.matchedCount; // Number of documents matched
-    res.modifiedCount; // Number of documents modified
-    res.acknowledged; // Boolean indicating everything went smoothly.
-    res.upsertedId; // null or an id containing a document that had to be upserted.
-    res.upsertedCount; // Number indicating how many documents had to be upserted. Will either be 0 or 1.*/
-
-    /*const taskDB : Task = await this.findById(id);
-    console.log("UPDATEE TASK");
-    console.log({...taskDB, ...task});
-    return await this.update(id, {...taskDB, ...task});*/
+    return await this.taskModel.updateOne({ _id: id }, task);
   }
   async saveProcessedImages(task : Task, originalImage: Image, processedImages) {
     const imagesModified : Image[] = [];
@@ -66,17 +55,12 @@ export class TaskService {
       const imageModified: Image = await this.imageService.generateImageModifiedSchema(task, originalImage, contentBuffer);
 
       //write file image
-      fileUtil.writeFile(process.env.PATH_IMAGES + '/' + imageModified.filePath, contentBuffer)
+      fileUtil.writeFile(process.env.PATH_IMAGES + '/' + imageModified.filePath, contentBuffer);
 
       imagesModified.push(imageModified);
     }
     imagesModified.push(originalImage);
     //update task
-    console.log('task');
-    console.log(task);
     this.updateOne(task._id, {state: Task.states.FINISHED,images: imagesModified });
-
-    console.log('imagesModified');
-    console.log(imagesModified);
   }
 }

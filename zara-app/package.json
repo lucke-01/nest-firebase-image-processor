@@ -17,7 +17,7 @@
     "buildstart:prod": "npm run build && env-cmd --no-override -f .env.pro node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test:all": "env-cmd --no-override -f .env.test jest --runInBand --config ./test/jest-all.json",
-    "test:spec": "env-cmd --no-override -f .env.test jest --runInBand",
+    "test:spec": "env-cmd --no-override -f .env.test jest --testTimeout=100000 --runInBand",
     "test:e2e": "env-cmd --no-override -f .env.test jest --testTimeout=100000 --config ./test/jest-e2e.json",
     "test:cov": "env-cmd --no-override -f .env.test jest --config ./test/jest-all.json --testTimeout=100000 --coverage",
     "test:watch": "env-cmd --no-override -f .env.test jest --testTimeout=100000 --config ./test/jest-e2e.json --watch",

@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron, CronExpression, Timeout  } from '@nestjs/schedule';
+import { Cron, CronExpression, Interval, Timeout  } from '@nestjs/schedule';
 import * as fs from 'fs';
 import axios from 'axios';
 import { Task } from '../schemas/task.schema';
@@ -16,7 +16,9 @@ export class ProcessImageTaskService {
   // Called when the current second is 30
   //@Cron(CronExpression.EVERY_30_SECONDS)
   // called once one second after app runs
-  @Timeout(1*1000)
+  // @Timeout(1*1000)
+  //called every 10 seconds
+  @Interval(10* 1000)
   handleCron() {
     this.logger.debug('CRON ProcessImageTaskService STARTED');
     try {

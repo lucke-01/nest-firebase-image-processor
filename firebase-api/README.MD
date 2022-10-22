@@ -1,38 +1,38 @@
 # Firebase API
 
-## Descripción
+## Description
 
-Aplicacion firebase basada en google cloud functions, que procesará en la nube tareas SERVERLESS,
-esto nos permite escalar la aplicación pagando en base a la carga de trabajo de determinadas funciones.
+Firebase application based on google cloud functions, which will process SERVERLESS tasks in the cloud,
+this allows us to scale the application by paying based on the workload of certain functions.
 
-### Framework Principal
+### Core Framework
 
 **ExpressJS**:
 
-Motivos de su uso:
-- Permite facil integración con firebase functions
-- Mientras que es menos mantenible que otros frameworks como NestJS nos permite 
-no obstante un rápido despliege sin compilado, typescript o una estructura compleja lo cual para pequeñas funcionalidades
-que serán procesadas en google firebase cloud nos proporcina la agilidad y flexibilidad optima.
+Reasons for its use:
+- Allows easy integration with firebase functions
+- While it is less maintainable than other frameworks like NestJS it allows us to
+however a fast deployment without compilation, typescript or complex structure which for small functionalities
+that will be processed in google firebase cloud provides us with optimal agility and flexibility.
 
-# Estructura de proyecto
+# project structure
 
-**firebaserc**: configuracion de google firebase.
-**functions**: Código de la aplicación.
-**functions/index.js**: Inicializa Firebase
+**firebaserc**: config of google firebase.
+**functions**: app code.
+**functions/index.js**: inits Firebase
 **functions/app**: ExpressJS app inicialization
-**functions/controller**: Exposición de APIS
+**functions/controller**: API exposition
 
-## Iniciar Aplicación
+## INIT APP
 
 ```bash
-#Dentro de: "firebase-api/functions/"
-# iniciar en local puerto: 5001
+#inside of: "firebase-api/functions/"
+# init in port: 5001
 npm run serve
-# desplegar en producción
+# deploy in pro
 npm run deploy
 ```
 
-## Ejemplo de petición de procesamiento de imagen en local
+## Example of local image processing request
 
 curl --location --request POST 'http://localhost:5001/zara-images/us-central1/app/file-process/resize-file' --form 'file=@"/C:/tmp/testImage.jpg"'

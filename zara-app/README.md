@@ -1,46 +1,46 @@
-# Zara Images NodeJS
+#Company NodeJS images
 
-## Descripción
+## Description
 
-Aplicación NodeJS que recoge peticiones con imagenes, y manda estas peticiones a un servicio serverless para obtener imagenes redimensionadas
+NodeJS application that collects requests with images, and sends these requests to a serverless service to obtain resized images
 
-# Estructura de proyecto
+# project structure
 
-## ficheros configuración Entornos
+## configuration files Environments
 
 **.env, .env.test, .env.local, .env.pro**: 
-ficheros de configuración segun entornos, incluyen cadena de conexión a base de datos, carpeta de output de imagenes y mas configuraciones
+configuration files according to environments, include database connection string, image output folder and more configurations
 
-## ficheros configuración Proyecto
+## Project configuration files
 
-**.eslintrc.js**: fichero de configuración de calidad de código
+**.eslintrc.js**: quality code
 
-**package.json**: fichero para gestionar configuraciones de proyecto, dependencias, ejecuciones etc...
+**package.json**: build project file config.
 
 **tsconfig.json, tsconfig.build.json, nest-cli.json**: 
-Ficheros usados a la hora de compilar código de typescript y javascript. siendo nest-cli.json especifico del framework nestjs con otras configuraciones
+Files used when compiling typescript and javascript code. being nest-cli.json specific to the nestjs framework with other settings
 
-## Ficheros Servicios externos
+## Files External services
 
-**/mongodb**: almacena configuración docker-compose para levantar una instancia de mongodb
+**/mongodb**: stores docker-compose configuration to start a mongodb instance
 
-## Ficheros Reporte de covertura de código
+## Files Code Coverage Report
 
-**/coverage/index.html**: generado al realizar el comando: "npm run test:cov" permite ver la cobertura de nuestros test en formato html.
+**/coverage/index.html**: generated when executing the command: "npm run test:cov" allows to see the coverage of our tests in html format.
 
-## Ficheros Testing
+## Test Files
 
-**/test**: Ficheros test End to End (http).
+**/test**: test End to End (http).
 
-**/*/*.spec.ts**: Ficheros test
+**/*/*.spec.ts**: unit test
 
-## Ficheros Aplicación
+## App files
 
-**/src/**: Ficheros de código
+**/src/**: code
 
-# Modelado de datos 
+# data model
 
-## Ejemplo de modelo de peticion en mongodb
+## example of request
 
 ```json
 {
@@ -61,116 +61,116 @@ Ficheros usados a la hora de compilar código de typescript y javascript. siendo
 }
 ```
 
-# Stack Tecnologíco
+# TECH Stack
 
-### Lenguaje Principal
+### Main language
 
 **NodeJS (Javascript y TypeScript)**:
-Motivos de su uso:
-- Pensado para procesar muchas peticiones por segundo
-- evita creación de hilos por cada petición agilizando las peticiones
-- TypeScript permite crear código potencilamente mas escalable y con menos errores "runtime" que javascript
+Reasons for its use:
+- Designed to process many requests per second
+- avoids creating threads for each request speeding up the requests
+- TypeScript allows you to create potentially more scalable code with fewer runtime errors than javascript
 
-### Framework Principal
+### Main Framework
 
 **NestJS**:
-Motivos de su uso:
-- NestJS está construido en typescript, permite inyección de dependencias,
-- Combina programación orientada a objetos con programación orientada a funciones
+Reasons for its use:
+- NestJS is built on typescript, allows dependency injection,
+- Combines object-oriented programming with function-oriented programming
 - highly testable, scalable, loosely coupled, and easily maintainable applications
-- Si bien nos aporta la escalabilidad y herramientas propias de un framework completo, no añade excesiva complejidad y permite trabajar agilmente
-- Permite validad datos usando anotaciones constraint en lugar de por ejemplo: ifs
+- Although it provides us with the scalability and tools of a complete framework, it does not add excessive complexity and allows us to work quickly
+- Allow data validation using constraint annotations instead of for example: ifs
 
-### Motor Base de datos
+### Base de datos engine
 
 **MongoDB**:
-Motivos de su uso:
-- Dada la topología de la aplicación, al no tener complejas relaciones y no necesitar en principio operaciones con transacciones
-se elige MongoDB como motor de base de datos con el fin de optimizar la velocidad de lectura de datos al no tener que manejar relaciones sino documentos.
-- Mayor velocidad de lectura, aunque se pierde los principios ACID tipicos de una base de datos SQL
+Reasons for its use:
+- Given the topology of the application, as it does not have complex relationships and does not initially need operations with transactions
+MongoDB is chosen as the database engine in order to optimize the data reading speed by not having to handle relationships but rather documents.
+- Greater reading speed, although the typical ACID principles of a SQL database are lost
 
-### Libreria Acceso datos
+### Data Access library
 
 **Mongosee**:
-Motivos de su uso:
-- Permite realizar consultas y operaciones sobre mongoDB de manera facil y rápida
+Reasons for its use:
+- Allows you to perform queries and operations on mongoDB easily and quickly
 
-### Libreria Testing
+### Testing libraries
 
 **Jest**:
-Motivos de su uso:
-- Permite creación de test de manera simple
-- Permite generación de reporte de cobertura de tests en formato html
+Reasons for its use:
+- Allows test creation in a simple way
+- Allows generation of test coverage report in html format
 
-### Libreria Testing End To End
+### Testing End To End library
 
 **supertest**:
-Motivos de su uso:
-- Permitede peticiones HTTP de manera sencilla, para luego testear los valores recibidos
+Reasons for its use:
+- Allows HTTP requests in a simple way, to later test the values ​​received
 
-### Libreria Variables de entorno o ficheros de configuración segun el entorno de ejecución
+### Library Environment variables or configuration files depending on the execution environment
 
 **env-cmd**:
-Motivos de su uso:
-- Permite crear varios ficheros de configuración los cuales serán cargados en base al entorno de ejecución
+Reasons for its use:
+- Allows you to create several configuration files which will be loaded based on the execution environment
 
-### Calidad de Código
+### Code Quality
 
 **EsLint**:
-Motivos de su uso:
-- Ayuda a unificar la manera de crear código en un mismo proyecto.
-- Ayuda a crear código con buenas prácticas y limpio.
+Reasons for its use:
+- Helps to unify the way of creating code in the same project.
+- Helps to create code with good practices and clean.
 
-### Base de datos en memoria para testing
+### memory database for testing
 
 **mongodb-memory-server**:
-Motivos de su uso:
-- Permite realizar test de integración como si fuera una base de datos real pero sin requerir de servicios externos que pueden estar o no operativos.
-- Entorno no mutable, es decir los test siempre atacarán los mismos datos evitando asi que den errores según los datos que haya en ese momento.
+Reasons for its use:
+- It allows performing integration tests as if it were a real database but without requiring external services that may or may not be operational.
+- Non-mutable environment, that is, the tests will always attack the same data, thus avoiding errors depending on the data that exists at that moment.
 
-### Virtualización de servicios externos
+### Virtualization
 
 **docker**:
-Motivos de su uso:
-- Permite levantar cualquier servicio en local, de esta manera se puede trabajar en el proyecto independientemente de las configuraciones y Sistemas Operativos de los integrantes.
+Reasons for its use:
+- It allows to raise any service locally, in this way you can work on the project regardless of the configurations and Operating Systems of the members.
 
-## Instalación
+## Instalation
 
 ```bash
 npm install
 ```
 
-# Iniciar Aplicación
+# Init
 
-## IMPORTANTE: necesario iniciar antes firebase-api: 
+## IMPORTANT: it is necessary to start firebase-api before: 
 
 ```bash
 cd firebase-api/functions
 npm run serve
 ```
 
-## Iniciar Aplicación Local
+## Init app local
 
 ```bash
-#Antes de iniciar se requiere una instancia de mongodb en localhost
+#Before starting a mongodb instance is required on localhost
 cd ./mongodb && docker-compose up
-# desarrollo
+# dev
 npm run start
-# modo watch
+# watch mode
 npm run start:dev
 # producción
 npm run start:prod
 ```
 
-## Iniciar Aplicación Docker
+## Start Docker Application
 
 ```bash
-#IMPORTANTE Antes de empezar tener libres los siguientes puertos: 27017, 3000 y 9229
-#Iniciar en modo desarrollo/debug
+#IMPORTANT Before starting, have the following ports free: 27017, 3000 and 9229
+#debug mode
 docker-compose up dev
-#Iniciar en modo produccion
+#pro mode
 docker-compose up prod
-#iniciar con acceso terminal
+#temporal access mode
 docker-compose up -d prod
 
 #start rebuilding image
@@ -179,12 +179,12 @@ docker-compose up dev --build
 
 ## Test
 ```bash
-# todos los tests
+# all tests
 npm run test:all
 # unit tests
 npm run test 
 # e2e tests
 npm run test:e2e
-# covertura de tests
+# tests coverture
 npm run test:cov
 ```

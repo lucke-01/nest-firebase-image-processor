@@ -1,5 +1,2 @@
 TODO:
-    1- finish zara-app cron operation
-    2- add unit test to zara-app cron
-    3- add integration tests to firebase-api
-    3- dockerizer firebase-api
+    - dockerizer firebase-api
